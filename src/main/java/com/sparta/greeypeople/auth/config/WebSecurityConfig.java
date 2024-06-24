@@ -67,7 +67,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests( (authorizeHttpRequests) ->
             authorizeHttpRequests
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers("/users/login", "/users/signup", "/api/users/refresh", "/users/login/kakao/**").permitAll()
+                .requestMatchers("/users/login", "/users/signup", "/api/users/refresh", "/users/login/kakao/**", "/users/login/naver/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/orders", "/stores").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()

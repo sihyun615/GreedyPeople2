@@ -60,6 +60,8 @@ public class User extends TimeStamp {
 
     private Long kakaoId;
 
+    private Long naverId;
+
     @ElementCollection(fetch = FetchType.EAGER) // FetchType 설정 추가
     @CollectionTable(name = "past_passwords", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "password")
@@ -86,6 +88,20 @@ public class User extends TimeStamp {
         this.kakaoId = kakaoId;
         this.pastPasswords.add(this.password);
     }
+
+    public User(String userId, String password, String userName, String email, UserStatus userStatus, UserAuth userAuth, Long kakaoId, Long naverId) {
+        this.userId = userId;
+        this.password = password;
+        this.userName = userName;
+        this.email = email;
+        this.userStatus = userStatus;
+        this.userAuth = userAuth;
+        this.kakaoId = kakaoId;
+        this.naverId = naverId;
+        this.pastPasswords.add(this.password);
+    }
+
+
 
     public void updateUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
@@ -126,6 +142,10 @@ public class User extends TimeStamp {
 
     public User kakaoIdUpdate(Long kakaoId) {
         this.kakaoId = kakaoId;
+        return this;
+    }
+    public User naverIdUpdate(Long naverId) {
+        this.naverId = naverId;
         return this;
     }
 }
