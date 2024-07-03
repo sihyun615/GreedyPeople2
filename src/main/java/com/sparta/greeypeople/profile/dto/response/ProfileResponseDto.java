@@ -2,6 +2,7 @@ package com.sparta.greeypeople.profile.dto.response;
 
 import com.sparta.greeypeople.user.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 /**
@@ -17,9 +18,22 @@ public class ProfileResponseDto {
 
     private String intro;
 
+    private long likedMenusCount;
+
+    private long likedReviewsCount;
+
     public ProfileResponseDto(User user) {
         this.userId = user.getUserId();
         this.userName = user.getUserName();
         this.intro = user.getIntro();
+    }
+
+    @Builder
+    public ProfileResponseDto(User user, long likedMenusCount, long likedReviewsCount) {
+        this.userId = user.getUserId();
+        this.userName = user.getUserName();
+        this.intro = user.getIntro();
+        this.likedMenusCount = likedMenusCount;
+        this.likedReviewsCount = likedReviewsCount;
     }
 }

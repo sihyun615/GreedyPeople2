@@ -1,5 +1,8 @@
 package com.sparta.greeypeople.profile.service;
 
+import com.sparta.greeypeople.exception.DataNotFoundException;
+import com.sparta.greeypeople.like.repository.MenuLikesRepository;
+import com.sparta.greeypeople.like.repository.ReviewLikesRepository;
 import com.sparta.greeypeople.profile.dto.request.PasswordUpdateRequestDto;
 import com.sparta.greeypeople.profile.dto.request.ProfileRequestDto;
 import com.sparta.greeypeople.profile.dto.response.ProfileResponseDto;
@@ -21,18 +24,29 @@ import java.util.List;
 public class ProfileService {
 
     private final UserRepository userRepository;
+    private final MenuLikesRepository menuLikesRepository;
+    private final ReviewLikesRepository reviewLikesRepository;
     private final PasswordEncoder passwordEncoder;
     private final PasswordListRepository passwordListRepository;
 
-    public ProfileService(UserRepository userRepository, PasswordEncoder passwordEncoder, PasswordListRepository passwordListRepository) {
+    public ProfileService(UserRepository userRepository,
+        MenuLikesRepository menuLikesRepository, ReviewLikesRepository reviewLikesRepository,
+        PasswordEncoder passwordEncoder, PasswordListRepository passwordListRepository) {
         this.userRepository = userRepository;
+        this.menuLikesRepository = menuLikesRepository;
+        this.reviewLikesRepository = reviewLikesRepository;
         this.passwordEncoder = passwordEncoder;
         this.passwordListRepository = passwordListRepository;
     }
 
     @Transactional(readOnly = true)
     public ProfileResponseDto getProfile(User user) {
-        return new ProfileResponseDto(user);
+        User validatedUser = userRepository.findById(user.getId()).orElseThrow(() ->
+            new DataNotFoundException("해당 사용자가 존재하지 않습니다."));
+
+        long likedMenusCount = menuLikesRepository.countMenuLikesByUserId(validatedUser.getId());
+        long likedReviewsCount = reviewLikesRepository.countReviewLikesByUserId(validatedUser.getId());
+        return new ProfileResponseDto(user, likedMenusCount, likedReviewsCount);
     }
 
     @Transactional
