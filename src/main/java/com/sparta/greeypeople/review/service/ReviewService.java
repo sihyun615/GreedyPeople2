@@ -9,11 +9,14 @@ import com.sparta.greeypeople.review.repository.ReviewRepository;
 import com.sparta.greeypeople.store.entity.Store;
 import com.sparta.greeypeople.store.repository.StoreRepository;
 import com.sparta.greeypeople.user.entity.User;
+import com.sparta.greeypeople.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
 
     public ReviewResponseDto createReview(ReviewRequestDto reviewRequestDto, Long storeId,
         User user) {
@@ -68,6 +72,24 @@ public class ReviewService {
         }
 
         reviewRepository.delete(review);
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<ReviewResponseDto> getLikesReviewsWithPageAndSortDesc(User user, int page, int size) {
+        User validatedUser = userRepository.findById(user.getId()).orElseThrow(() ->
+            new DataNotFoundException("해당 사용자가 존재하지 않습니다."));
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        return reviewRepository.getLikesReviewsWithPageAndSortDesc(validatedUser, pageRequest.getOffset(), pageRequest.getPageSize())
+            .stream()
+            .map(r ->
+                ReviewResponseDto.builder()
+                    .content(r.getContent())
+                    .updateAt(r.getModifiedAt())
+                    .build())
+            .collect(Collectors.toList());
     }
 
     public Store findStore(Long storeId) {
