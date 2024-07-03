@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -117,5 +118,14 @@ public class ReviewController {
         reviewService.deleteReview(storeId, reviewId, userDetails.getUser());
         StatusCommonResponse response = new StatusCommonResponse(200, "리뷰 삭제 성공");
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/stores/reviews/likes")
+    public ResponseEntity<DataCommonResponse<List<ReviewResponseDto>>> getLikesReviews(@AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestParam("page") int page) {
+        List<ReviewResponseDto> reviews = reviewService.getLikesReviewsWithPageAndSortDesc(userDetails.getUser(), page, 5);
+        DataCommonResponse<List<ReviewResponseDto>> response = new DataCommonResponse<>(HttpStatus.OK.value(), "좋아요한 리뷰 목록 최신순 조회 완료", reviews);
+        return ResponseEntity.ok().body(response);
     }
 }
