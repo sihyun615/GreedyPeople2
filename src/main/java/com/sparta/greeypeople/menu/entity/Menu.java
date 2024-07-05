@@ -9,6 +9,7 @@ import com.sparta.greeypeople.user.entity.User;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -47,6 +48,15 @@ public class Menu extends TimeStamp {
         this.price = requestDto.getPrice();
         this.user = user;
         this.store = store;
+    }
+
+    @Builder
+    public Menu(Long id, String menuName, Integer price, Store store, User user) {
+        this.id = id;
+        this.menuName = menuName;
+        this.price = price;
+        this.store = store;
+        this.user = user;
     }
 
     public void update(AdminMenuUpdateRequestDto requestDto) {
