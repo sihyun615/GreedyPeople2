@@ -1,4 +1,4 @@
-package com.sparta.greeypeople.service;
+package com.sparta.greeypeople.repository;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
