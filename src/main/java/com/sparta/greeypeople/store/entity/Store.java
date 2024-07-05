@@ -28,6 +28,17 @@ public class Store extends TimeStamp {
         this.intro = requestDto.getIntro();
     }
 
+    public Store(String storeName, String intro) {
+        this.storeName = storeName;
+        this.intro = intro;
+    }
+
+    public Store(Long id, String storeName, String intro) {
+        this.id = id;
+        this.storeName = storeName;
+        this.intro = intro;
+    }
+
     public void update(AdminStoreUpdateRequestDto requestDto) {
         this.storeName = requestDto.getStoreName();
         this.intro = requestDto.getIntro();

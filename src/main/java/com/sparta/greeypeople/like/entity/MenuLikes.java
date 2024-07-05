@@ -5,6 +5,7 @@ import com.sparta.greeypeople.common.TimeStamp;
 
 import com.sparta.greeypeople.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,13 @@ public class MenuLikes extends TimeStamp {
 	private Menu menu;
 
 	public MenuLikes(User user, Menu menu) {
+		this.user = user;
+		this.menu = menu;
+	}
+
+	@Builder
+	public MenuLikes(Long id, User user, Menu menu) {
+		this.id = id;
 		this.user = user;
 		this.menu = menu;
 	}

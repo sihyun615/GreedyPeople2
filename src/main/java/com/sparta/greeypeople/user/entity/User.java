@@ -10,6 +10,7 @@ import com.sparta.greeypeople.user.enumeration.UserStatus;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -76,6 +77,7 @@ public class User extends TimeStamp {
         this.pastPasswords.add(this.password);
     }
 
+    @Builder
     public User(String userId, String password, String userName, String email, UserStatus userStatus, UserAuth userAuth, Long kakaoId) {
         this.userId = userId;
         this.password = password;
@@ -127,5 +129,9 @@ public class User extends TimeStamp {
     public User kakaoIdUpdate(Long kakaoId) {
         this.kakaoId = kakaoId;
         return this;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
